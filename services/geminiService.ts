@@ -1,9 +1,15 @@
 import { GoogleGenAI, Chat } from "@google/genai";
 
-// FIX: Updated to use process.env.API_KEY directly as per the coding guidelines.
-// This resolves the TypeScript error with `import.meta.env` and assumes the
-// API key is available in the execution environment.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// FIX: Switched from `import.meta.env.VITE_API_KEY` to `process.env.API_KEY`.
+// This resolves the TypeScript error "Property 'env' does not exist on type 'ImportMeta'"
+// and aligns with the Gemini API guideline that mandates using `process.env.API_KEY`.
+const API_KEY = process.env.API_KEY;
+
+if (!API_KEY) {
+  throw new Error("API_KEY is not defined. Please check your environment variables.");
+}
+
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 const systemInstruction = `You are the 'LG MEA HVAC HUB Expert Assistant'. Your sole purpose is to provide expert, accurate, and helpful information on two specific topics:
 1.  **LG HVAC Products:** Answer questions about LG's HVAC product line, including features, benefits, and differences between models like VRF Systems, Chillers, and Air Purifiers. Be clear and easy for customers to understand.
