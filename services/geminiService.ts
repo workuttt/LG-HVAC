@@ -1,15 +1,9 @@
 import { GoogleGenAI, Chat } from "@google/genai";
 
-// FIX: Switched from `import.meta.env.VITE_API_KEY` to `process.env.API_KEY`.
-// This resolves the TypeScript error "Property 'env' does not exist on type 'ImportMeta'"
-// and aligns with the Gemini API guideline that mandates using `process.env.API_KEY`.
-const API_KEY = process.env.API_KEY;
-
-if (!API_KEY) {
-  throw new Error("API_KEY is not defined. Please check your environment variables.");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+// Fix: Aligned API key handling with coding guidelines. The API key is now sourced
+// directly from process.env.API_KEY, which resolves the TypeScript error related
+// to 'import.meta.env'. Per guidelines, the key is assumed to be available.
+const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
 
 const systemInstruction = `You are the 'LG MEA HVAC HUB Expert Assistant'. Your sole purpose is to provide expert, accurate, and helpful information on two specific topics:
 1.  **LG HVAC Products:** Answer questions about LG's HVAC product line, including features, benefits, and differences between models like VRF Systems, Chillers, and Air Purifiers. Be clear and easy for customers to understand.
@@ -34,6 +28,10 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
     return response.text;
   } catch (error) {
     console.error("Error sending message to Gemini:", error);
+    // Provide a more specific error message if the API key might be the issue
+    if (error instanceof Error && error.message.includes('API key')) {
+         return "I'm sorry, there seems to be an issue with the API configuration. Please contact the administrator.";
+    }
     return "I'm sorry, I'm having trouble connecting to the expert assistant right now. Please check your connection or try again later.";
   }
 };
