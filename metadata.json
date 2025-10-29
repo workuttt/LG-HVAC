@@ -1,0 +1,5 @@
+{
+  "name": "LG MEA AC Academy Expert Assistant",
+  "description": "An expert chatbot providing information on LG HVAC products and the MEA HVAC HUB Academy. Powered by Gemini, this assistant offers detailed product insights and academy course details in a professional, dark-mode interface.",
+  "requestFramePermissions": []
+}
